@@ -1,3 +1,8 @@
+
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -14,7 +19,17 @@ public class Main {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(enderecoAPI)).build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        String json = response.body();
+        Gson  gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+        /*
+             A busca pelo filme ocorre de forma padrao, lancando a request para a API.
+             O grande diferencial esta na forma que tratamentos a response, isto eh, usando a lib gson com um GsonBuilder
+             e padronizando os nossos campos, visando nao haver um choque entre os formatos, por ex: "Filme:SeiLa" e "filme:SeiLa"
+         */
+        MovieOMDB movie = gson.fromJson(json, MovieOMDB.class);
 
-        System.out.println(response.body());
+        System.out.println(movie.title());
+
+
     }
 }
