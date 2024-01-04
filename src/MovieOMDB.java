@@ -1,2 +1,2 @@
-public record MovieOMDB(String title, int duration, String director) {
+public record MovieOMDB(String title, int duration, String director, String year) {
 }
